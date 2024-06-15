@@ -30,7 +30,7 @@ def create_card_layout_with_images(filename, card_width, card_height, space_betw
     
     no_top_margin_start = page_height - card_height
     normal_top_start = page_height - (page_height - (cards_per_col * card_height + (cards_per_col - 1) * space_between)) / 2 - card_height
-    preferred_top_start = no_top_margin_start
+    preferred_top_start = normal_top_start
     
     # Initial position
     start_x = (page_width - (cards_per_row * card_width + (cards_per_row - 1) * space_between)) / 2
@@ -72,8 +72,8 @@ def create_card_layout_with_images(filename, card_width, card_height, space_betw
                     c.line(x * mm, 0, x * mm, page_height_pt)
                 if col == 0 or col == cards_per_row - 1:  # Right edge of the last column
                     c.line((x + card_width) * mm, 0, (x + card_width) * mm, page_height_pt)
-                # if row == 0:  # Top edge of the first row
-                #     c.line(0, (y + card_height) * mm, page_width_pt, (y + card_height) * mm)
+                if row == 0:  # Top edge of the first row
+                    c.line(0, (y + card_height) * mm, page_width_pt, (y + card_height) * mm)
                 if row == cards_per_col - 1:  # Bottom edge of the last row
                     c.line(0, y * mm, page_width_pt, y * mm)
                     
