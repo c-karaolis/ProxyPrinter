@@ -6,42 +6,36 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.colors import HexColor
 
 def get_images_from_folder(folder_path):
-    # Get list of all image files in the folder
     supported_formats = ('.png', '.jpg', '.jpeg', '.gif', '.bmp')
     return [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.lower().endswith(supported_formats)]
 
 def create_card_layout_with_images(filename, card_width, card_height, space_between, folder_path):
-    # A4 page size in mm
     page_width, page_height = A4
+    print(page_height, page_width)
     page_width /= mm
     page_height /= mm
-
+    print(page_height, page_width)
     # Convert page size to points
     page_width_pt, page_height_pt = page_width * mm, page_height * mm
-
-    # Create a new canvas
+    print(page_height_pt, page_width_pt)
     c = canvas.Canvas(filename, pagesize=(page_width_pt, page_height_pt))
 
     c.setStrokeColor(HexColor(guideline_color))
     c.setLineWidth(0)
-    # Number of cards per row and column
     cards_per_row = 3
     cards_per_col = 3
-    
+
+    # added at the top to save me a side cut
     no_top_margin_start = page_height - card_height
     normal_top_start = page_height - (page_height - (cards_per_col * card_height + (cards_per_col - 1) * space_between)) / 2 - card_height
     preferred_top_start = normal_top_start
     
-    # Initial position
     start_x = (page_width - (cards_per_row * card_width + (cards_per_row - 1) * space_between)) / 2
-    # added at the top to save me a side cut
     start_y = preferred_top_start
 
-    # Get images from folder
     image_paths = get_images_from_folder(folder_path)
     image_index = 0
 
-    # Loop through all images and create pages as necessary
     while image_index < len(image_paths):
         # Draw the cards and add images
         for row in range(cards_per_col):
@@ -90,15 +84,14 @@ def create_card_layout_with_images(filename, card_width, card_height, space_betw
             c.setLineWidth(0)
             start_y = preferred_top_start  # Reset the start_y for new pages
 
-    # Save the PDF
     c.save()
 
 card_width_mm = 63
 card_height_mm = 88
 space_between_mm = 0.1
-guideline_color = '#FF0000'  # Red color
+guideline_color = '#FF0000'
 
 # Folder containing images
-folder_path = './proxies/test'
+folder_path = './proxies/new paper'
 
 create_card_layout_with_images(f"{folder_path}/proxies.pdf", card_width_mm, card_height_mm, space_between_mm, folder_path)
